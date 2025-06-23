@@ -59,30 +59,38 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-
+//criar função playSound
+//criar função removeTransition
 
 function playSound(e) {
-  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
-  
-  if(!audio) return;
-  audio.currentTime = 0;
-  audio.play();
-  key.classList.add('playing');
-
+  //procura as tags de audio onde a tecla prssionada corresponde ao data-key do html
+const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  //procura os elementos com uma classe de "key" em que a sua data-key corresponde á tecla carregada
+const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+// quando a tecla carregada não corresponde a nenhum elemento que tinha a sua data-key, sai da funçao
+if (!audio) return;
+// adiciona a class "playing" para a tecla ficar com o CSS
+key.classList.add("playing");
+//coloca a faixa de som no inicio
+audio.currentTime = 0;
+//toca o som
+audio.play();
 }
-
 
 function removeTransition(e) {
-  if(e.propertyName !== 'transform') return; //skip if it's not a transform
-  this.classList.remove('playing');
+  //remove transiçao apenas nos "transform"
+  if (e.propertyName !== "transform") return
+  e.target.classList.remove("playing")
 }
+//remove a transiçao quando ela acabar
+const keys = document.querySelectorAll(".key")
+keys.forEach(key => {
+  key.addEventListener("transitionend", removeTransition)
+});
+//toca o som e inicia a transição
+window.addEventListener("keydown", playSound);
 
-const keys = document.querySelectorAll('.key');
-keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-window.addEventListener('keydown', playSound)
 </script>
-
 
 </body>
 </html>
